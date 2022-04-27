@@ -27,6 +27,7 @@ class EditStuffModal extends React.Component {
 
   EditModal() {
     const [open, setOpen] = React.useState(false);
+    const submitLocal = (data) => { console.log(data); };
     return (
       <Modal
         onClose={() => setOpen(false)}
@@ -39,7 +40,7 @@ class EditStuffModal extends React.Component {
           <Grid container centered>
             <Grid.Column>
               <Header as="h2" textAlign="center">Edit Stuff</Header>
-              <AutoForm schema={bridge} onSubmit={data => this.submit(data)} model={this.props.stuff}>
+              <AutoForm schema={bridge} onSubmit={data => submitLocal(data)} model={this.props.stuff}>
                 <Segment>
                   <TextField name='name'/>
                   <NumField name='quantity' decimal={false}/>
