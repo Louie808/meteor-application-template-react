@@ -5,6 +5,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import { Stuffs } from '../../api/stuff/Stuff';
 import StuffItem from '../components/StuffItem';
+import AddStuffModal from './AddStuffModal';
 
 /** Renders a table containing all of the Stuff documents. Use <StuffItem> to render each row. */
 class ListStuff extends React.Component {
@@ -26,12 +27,14 @@ class ListStuff extends React.Component {
               <Table.HeaderCell>Quantity</Table.HeaderCell>
               <Table.HeaderCell>Condition</Table.HeaderCell>
               <Table.HeaderCell>Edit</Table.HeaderCell>
+              <Table.HeaderCell>Edit Modal Button</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
             {this.props.stuffs.map((stuff) => <StuffItem key={stuff._id} stuff={stuff} />)}
           </Table.Body>
         </Table>
+        <AddStuffModal/>
       </Container>
     );
   }
