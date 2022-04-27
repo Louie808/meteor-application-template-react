@@ -39,6 +39,7 @@ class AddStuff extends React.Component {
   }
 
   AddModal() {
+    const submitLocal = (data) => { console.log(data); };
     const [open, setOpen] = React.useState(false);
     let fRef = null;
     return (
@@ -53,7 +54,7 @@ class AddStuff extends React.Component {
           <Grid container centered>
             <Grid.Column>
               <Header as="h2" textAlign="center">Add Stuff</Header>
-              <AutoForm ref={ref => { fRef = ref; }} schema={bridge} onSubmit={data => this.submit(data, fRef)} >
+              <AutoForm ref={ref => { fRef = ref; }} schema={bridge} onSubmit={data => submitLocal(data, fRef)} >
                 <Segment>
                   <TextField name='name'/>
                   <NumField name='quantity' decimal={false}/>
