@@ -15,8 +15,7 @@ class StuffItem extends React.Component {
         <Table.Cell>
           <Link to={`/edit/${this.props.stuff._id}`}>Edit</Link>
         </Table.Cell>
-        <Table.Cell>Inactive</Table.Cell>
-        {/* <EditStuffModal stuffItem={this.props.stuff}/> */}
+        <EditStuffModal stuff={this.props.stuff}/>
       </Table.Row>
     );
   }

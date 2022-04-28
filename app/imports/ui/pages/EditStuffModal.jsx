@@ -3,6 +3,7 @@ import { Grid, Header, Segment, Modal, Button } from 'semantic-ui-react';
 import swal from 'sweetalert';
 import { AutoForm, ErrorsField, HiddenField, NumField, SelectField, SubmitField, TextField } from 'uniforms-semantic';
 import { withRouter } from 'react-router-dom';
+import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import { Stuffs } from '../../api/stuff/Stuff';
@@ -12,14 +13,6 @@ const bridge = new SimpleSchema2Bridge(Stuffs.schema);
 /** Renders the Page for editing a single document. */
 class EditStuffModal extends React.Component {
 
-  // On successful submit, insert the data.
-  submit(data) {
-    const { name, quantity, condition, _id } = data;
-    Stuffs.collection.update(_id, { $set: { name, quantity, condition } }, (error) => (error ?
-      swal('Error', error.message, 'error') :
-      swal('Success', 'Item updated successfully', 'success')));
-  }
-
   // If the subscription(s) have been received, render the page, otherwise show a loading icon.
   render() {
     return this.renderPage();
@@ -27,6 +20,13 @@ class EditStuffModal extends React.Component {
 
   EditModal() {
     const [open, setOpen] = React.useState(false);
+    const submitLocal = (data) => {
+      console.log(data);
+      const { name, quantity, condition, _id } = data;
+      Stuffs.collection.update(_id, { $set: { name, quantity, condition } }, (error) => (error ?
+        swal('Error', error.message, 'error') :
+        swal('Success', 'Item updated successfully', 'success')));
+    };
     return (
       <Modal
         onClose={() => setOpen(false)}
@@ -39,7 +39,7 @@ class EditStuffModal extends React.Component {
           <Grid container centered>
             <Grid.Column>
               <Header as="h2" textAlign="center">Edit Stuff</Header>
-              <AutoForm schema={bridge} onSubmit={data => this.submit(data)} model={this.props.stuff}>
+              <AutoForm schema={bridge} onSubmit={data => submitLocal(data)} model={this.props.stuff}>
                 <Segment>
                   <TextField name='name'/>
                   <NumField name='quantity' decimal={false}/>
@@ -81,4 +81,12 @@ EditStuffModal.propTypes = {
   stuff: PropTypes.object,
 };
 
-export default withRouter(EditStuffModal);
+export default withTracker(({ match }) => {
+  // Get the documentID from the URL field. See imports/ui/layouts/App.jsx for the route containing :_id.
+  const documentId = match.params._id;
+  // Get the document
+  const stuff = Stuffs.collection.findOne(documentId);
+  return {
+    stuff,
+  };
+})(EditStuffModal);

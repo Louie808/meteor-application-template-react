@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Container, Table, Header, Loader } from 'semantic-ui-react';
+import { Container, Table, Header, Loader, Button } from 'semantic-ui-react';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import { Stuffs } from '../../api/stuff/Stuff';
@@ -35,6 +35,7 @@ class ListStuff extends React.Component {
           </Table.Body>
         </Table>
         <AddStuffModal/>
+        <Button onClick={() => console.log(this.props.stuffs)}>Print Stuffs Collection</Button>
       </Container>
     );
   }

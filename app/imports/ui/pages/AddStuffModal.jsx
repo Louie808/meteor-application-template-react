@@ -25,6 +25,7 @@ class AddStuff extends React.Component {
 
   // On submit, insert the data.
   submit(data, formRef) {
+    console.log('Entered Submit Function');
     const { name, quantity, condition } = data;
     const owner = Meteor.user().username;
     Stuffs.collection.insert({ name, quantity, condition, owner },
@@ -39,6 +40,21 @@ class AddStuff extends React.Component {
   }
 
   AddModal() {
+    const submitLocal = (data, formRef) => {
+      console.log(data);
+      console.log('Entered Submit Function');
+      const { name, quantity, condition } = data;
+      const owner = Meteor.user().username;
+      Stuffs.collection.insert({ name, quantity, condition, owner },
+        (error) => {
+          if (error) {
+            swal('Error', error.message, 'error');
+          } else {
+            swal('Success', 'Item added successfully', 'success');
+            formRef.reset();
+          }
+        });
+    };
     const [open, setOpen] = React.useState(false);
     let fRef = null;
     return (
@@ -49,16 +65,23 @@ class AddStuff extends React.Component {
         trigger={<Button>Show Add Modal</Button>}
       >
         <Modal.Header>Add A Stuff Item</Modal.Header>
-        <Modal.Content AutoForm>
+        <Modal.Content>
           <Grid container centered>
             <Grid.Column>
               <Header as="h2" textAlign="center">Add Stuff</Header>
-              <AutoForm ref={ref => { fRef = ref; }} schema={bridge} onSubmit={data => this.submit(data, fRef)} >
+              <AutoForm ref={ref => { fRef = ref; }} schema={bridge} onSubmit={data => submitLocal(data, fRef)} >
                 <Segment>
                   <TextField name='name'/>
                   <NumField name='quantity' decimal={false}/>
                   <SelectField name='condition'/>
                   <SubmitField value='Submit'/>
+                  <Button color='blue' onClick={(data) => {
+                    // this.submit(data, fRef);
+                    const { name, quantity, condition } = data;
+                    console.log(name, quantity, condition);
+                    console.log(data);
+                    console.log('printed to console data inputted');
+                  }}>Print to Console Data inputted</Button>
                   <ErrorsField/>
                 </Segment>
               </AutoForm>
